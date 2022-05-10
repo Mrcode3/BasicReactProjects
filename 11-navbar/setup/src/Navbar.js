@@ -1,10 +1,58 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { FaBars, FaTwitter } from 'react-icons/fa'
-import { links, social } from './data'
-import logo from './logo.svg'
+import React, { useState, useRef, useEffect } from "react";
+import { FaBars, FaTwitter } from "react-icons/fa";
+import { links, social } from "./data";
+import logo from "./logo.svg";
 
 const Navbar = () => {
-  return <h4>navbar</h4>
-}
+  const [showLink, setShowLink] = useState(false);
+  const linksCotainerRef = useRef(null);
+  const linksRef = useRef(null);
 
-export default Navbar
+  useEffect(() => {
+    const linkHeight = linksRef.current.getBoundingClientRect().height;
+
+    if (showLink) {
+      linksCotainerRef.current.style.height = `${linkHeight}px`;
+    } else {
+      linksCotainerRef.current.style.height = "0px";
+    }
+  }, [showLink]);
+
+  return (
+    <nav>
+      <div className="nav-center">
+        <div className="nav-header">
+          <img src={logo} alt="logo" />
+          <button className="nav-toggle" onClick={() => setShowLink(!showLink)}>
+            <FaBars />
+          </button>
+        </div>
+
+        <div className="links-container" ref={linksCotainerRef}>
+          <ul className="links" ref={linksRef}>
+            {links.map((link) => {
+              const { id, url, text } = link;
+              return (
+                <li key={id}>
+                  <a href={url}>{text}</a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+        <ul className="social-icons">
+          {social.map((socialLink) => {
+            const { id, url, icon } = socialLink;
+            return (
+              <li key={id}>
+                <a href={url}>{icon}</a>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </nav>
+  );
+};
+
+export default Navbar;
